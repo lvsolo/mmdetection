@@ -116,7 +116,7 @@ class BertModel(BaseModel):
                 'transformers is not installed, please install it by: '
                 'pip install transformers.')
 
-        self.tokenizer = AutoTokenizer.from_pretrained(name)
+        self.tokenizer = AutoTokenizer.from_pretrained(name, proxies={'all':"http://127.0.0.1:7890"})
         self.language_backbone = nn.Sequential(
             OrderedDict([('body',
                           BertEncoder(
@@ -197,7 +197,7 @@ class BertEncoder(nn.Module):
         config.gradient_checkpointing = use_checkpoint
         # only encoder
         self.model = HFBertModel.from_pretrained(
-            name, add_pooling_layer=add_pooling_layer, config=config)
+            name, add_pooling_layer=add_pooling_layer, config=config, proxies={'all':"http://127.0.0.1:7890"})
         self.language_dim = config.hidden_size
         self.num_layers_of_embedded = num_layers_of_embedded
 
